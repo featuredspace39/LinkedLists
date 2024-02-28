@@ -1,0 +1,179 @@
+public class LL_Poole<T> implements LinkedListInterface<T>{
+  private LLNode_Poole initial;
+
+  LL_Poole(){
+    initial = null;
+  }
+
+  public boolean contains(T element){
+    LLNode_Poole<T> iterate = initial;
+     //while loop checks if the node's data is equal to target element, then returns true if match is found.
+    while (iterate != null){
+      if (iterate.getData().equals(element)){
+        return true;
+      }
+      iterate = iterate.getNext(); //getting next node
+    }
+    return false; //false if not equal
+  }
+
+  public int size() {
+    LLNode_Poole<T> iterate = initial; //initialize pointer to first node
+    int count = 0; 
+    while (iterate != null){ //while loop to accumulate total count
+      count++; 
+      iterate = iterate.getNext();
+    }
+    return count; //return final count
+  }
+  
+  public int indexOf(T element){
+    LLNode_Poole<T> iterate = initial; //initialize pointer to first and index
+    int index = 0;
+    while (iterate != null) {
+      if (iterate.getData().equals(element)){
+        return index; //return index when matching element is found
+      }
+      iterate = iterate.getNext();
+      index++;
+    }
+    return -1; //-1 if element is not found in list 
+  }
+
+  public int lastIndexOf(T element){ 
+    LLNode_Poole<T> iterate = initial;
+    int lastIndex = -1;
+    int index = 0;
+    while (iterate != null){
+      if (iterate.getData().equals(element)){
+        lastIndex = index; //setting last index to current index
+      }
+      iterate = iterate.getNext();
+      index++;
+    }
+    return lastIndex;
+  }
+
+  public boolean isEmpty() {
+    return initial == null; //simple one liner 
+  }
+
+  public T get(int index){
+    if (index < 0 || index >= size()){
+      throw new IndexOutOfBoundsException();
+    }
+
+    LLNode_Poole<T> iterate = initial;
+    for (int i = 0; i < index; i++){
+      iterate = iterate.getNext();
+    }
+    return iterate.getData(); //.getData returns the value of whatever it currently is
+  }
+
+  public T set(int index, T element){
+    if (index < 0 || index >= size()){
+      throw new IndexOutOfBoundsException();
+    }
+
+    LLNode_Poole<T> iterate = initial;
+    for (int i = 0; i < index; i++){
+      iterate = iterate.getNext(); //iterate to reach specified index
+    }
+
+    T oldElement = iterate.getData(); //retrieves old element
+    iterate.setData(element);
+
+    return oldElement;
+  }
+
+  public void clear(){
+      initial = null; //simple one liner
+  }
+
+ public void add (int index, T element){
+   if (index < 0 || index > size()){
+     throw new IndexOutOfBoundsException();
+   }
+
+   LLNode_Poole<T> newNode = new LLNode_Poole<>(element, null);
+
+   if (index == 0){
+     newNode.setNext(initial);
+       initial = newNode;
+   } else {
+     LLNode_Poole<T> prior = null;
+     LLNode_Poole<T> following = initial;
+
+     for (int i=0; i<index; i++){
+         prior = following;
+         following = following.getNext();
+     }
+     //adding new node to list
+     newNode.setNext(following); 
+       prior.setNext(newNode); 
+   }
+ }
+
+  public void add(T element){
+    LLNode_Poole<T> newNode = new LLNode_Poole<>(element, null);
+
+    if (initial == null){
+        initial = newNode; //If list is empty, set initial node to new node
+    } else {
+      LLNode_Poole<T> prior = null; 
+      LLNode_Poole<T> following = initial;
+
+      while (following != null){
+          prior = following; //update previous reference 
+          following = following.getNext(); //move to next node
+      }
+
+        prior.setNext(newNode);
+    }
+  }
+
+  public T remove(int index) {
+    if (index < 0 || index >= size() || isEmpty()) {
+      throw new IndexOutOfBoundsException();
+    }
+    LLNode_Poole<T> prior = null;
+    LLNode_Poole<T> following = initial;
+
+    for (int i = 0; i < index; i++){
+        prior = following;
+        following = following.getNext();
+    }
+
+    if (prior == null){
+      //removing the first element
+        initial = following.getNext(); 
+    } else {
+        prior.setNext(following.getNext());
+    }
+
+      return following.getData();
+  }
+
+  public boolean remove(T element){
+      LLNode_Poole<T> prior = null;
+      LLNode_Poole<T> following = initial;
+
+    while (following != null){
+      if (following.getData().equals(element)){
+        if (prior == null){
+          //removing first element
+            initial = following.getNext();
+        } else {
+            prior.setNext(following.getNext());
+        }
+        return true; //element found and removed
+      }
+ 
+        prior = following; //update previous reference 
+        following = following.getNext(); // move to next node
+    }
+
+    return false; //element not found
+    }
+  
+  }
